@@ -25,7 +25,7 @@ model User {
   updatedAt DateTime @updatedAt
   email String   @db.VarChar(255) @unique
   password String?
-  formation
+  formation Promo
   annee Int
   post Post[]
   vote VoteDate[]
