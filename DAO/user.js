@@ -6,10 +6,12 @@ function login(email){
         where: {email: email},
     })
 }
-function create(email){
+function create(email,formation,annee){
     return prisma.user.create({
             data: {
                 email,
+                formation,
+                annee
             }
     })
 }

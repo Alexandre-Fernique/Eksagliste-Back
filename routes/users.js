@@ -8,31 +8,30 @@ const passwordHash = require('password-hash');
 
 
 
-router.post('/login', function(req, res, next) {
+router.post('/login', function(req, res) {
   if(Test.email(req.body.email)) {
+  console.log(req.body)
     User.login(req.body.email).then((query) => {
       console.log(query)
       if (passwordHash.verify(req.body.password, query.password)) {
         let token = Jwt.sign({id: query.id}, process.env.SECRETKEY || "test")
-        console.log(token)
-        res.cookie("token", token, {secure: true, httpOnly: true,})
-        res.send('respond with a resource');
+        res.json({'acess_token':token})
       } else {
         res.send("wrong user")
       }
     }).catch((e) => {
       console.log(e)
-      res.send('err');
+      res.send(
+          'err');
     })
   }else {
     res.sendStatus(401)
   }
 });
 
-router.post('/create', function(req, res, next) {
+router.post('/create', function(req, res) {
   console.log(req.body)
-
-  User.create(req.body.email).then((res)=>{
+  User.create(req.body.email,req.body.formation, req.body.annee).then((res)=>{
     console.log(res)
   }).catch((e)=>{
     console.log(e)
@@ -41,18 +40,23 @@ router.post('/create', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.put('/updatePassword/:uuid', function(req, res, next) {
+router.put('/updatePassword/:uuid', function(req, res) {
+  if(Test.password(req.body.password)){
     const hashedPassword = passwordHash.generate(req.body.password);
-    User.update(req.params.uuid,hashedPassword).then((query)=>{
-      if (query.count == 1){
+    User.update(req.params.uuid, hashedPassword).then((query) => {
+      if (query.count == 1) {
         res.sendStatus(200)
-      }else {
+      } else {
         res.sendStatus(401)
       }
-    }).catch((e)=>{
+    }).catch((e) => {
       console.log(e)
       res.sendStatus(401)
     })
+  }
+  else {
+    res.sendStatus(401)
+  }
 });
 
 

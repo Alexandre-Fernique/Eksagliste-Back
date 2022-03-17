@@ -2,22 +2,32 @@ const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
 
 
-function vote(email){
-    return prisma.voteDate.create({
-        data: {
-            email,
-        }
-    })
-}
-function countVote(liste){
-    return prisma.user.updateMany({
+function vote(uuid,liste){
+    const date = new Date()
+    return prisma.VoteDate.upsert({
         where:{
-            id : uuid,
-            password: null
+            userId_date:{
+                userId: uuid,
+                date: date.toISOString()
+            }
         },
-        data:{
-            password
+        update:{
+            listeId:liste
+
+        },
+        create: {
+            userId:uuid,
+            listeId:liste
+
         }
     })
 }
-module.exports ={vote}
+function countVote(){
+    return prisma.VoteDate.groupBy({
+        by:['listeId'],
+        _count:{
+            _all:true
+        },
+    })
+}
+module.exports ={vote,countVote}
