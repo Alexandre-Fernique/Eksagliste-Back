@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Liste {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  title     String   @db.VarChar(255)
+  image     String?
+  vote VoteDate[]
+
+}
+
+model User {
+  id String      @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email String   @db.VarChar(255) @unique
+  password String?
+  formation
+  annee Int
+  post Post[]
+  vote VoteDate[]
+
+}
+model Post {
+  id String      @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  text String
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+}
+model VoteDate{
+    date DateTime @db.Date @default(now())
+    userId String
+    listeId Int
+    listeVoted    Liste   @relation(fields: [listeId], references: [id])
+    userVoted User @relation(fields:[userId],references:[id])
+    @@id([userId,date])
+
+}
+enum Promo{
+IG
+GBA
+MI
+PEIP
+STE
+EGC
+MSI
+MEA
+SE
+DO
+MAT
+}
