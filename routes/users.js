@@ -13,11 +13,11 @@ router.post('/login', function(req, res) {
   console.log(req.body)
     User.login(req.body.email).then((query) => {
       console.log(query)
-      if (passwordHash.verify(req.body.password, query.password)) {
+      if (query != null && passwordHash.verify(req.body.password, query.password)) {
         let token = Jwt.sign({id: query.id}, process.env.SECRETKEY || "test")
         res.json({'acess_token':token})
       } else {
-        res.send("wrong user")
+        res.sendStatus(400)
       }
     }).catch((e) => {
       console.log(e)
