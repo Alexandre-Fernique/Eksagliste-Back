@@ -19,18 +19,15 @@ router.post('/vote', function(req, res) {
     })
 });
 router.get('/count', function(req, res,) {
-    Auth.decode(req).then(()=>{
-        Liste.countVote().then((query)=>{
-            res.status(200).json(query)
-        }).catch((e)=>{
-            console.log(e)
-            res.sendStatus(401)
-        })
+    Liste.countVote().then((query)=>{
+        res.status(200).json(query)
     }).catch((e)=>{
-            console.log(e)
-            res.sendStatus(401)
-        })
+        console.log(e)
+        res.sendStatus(401)
+    })
+
 });
+
 
 
 

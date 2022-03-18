@@ -23,11 +23,19 @@ function vote(uuid,liste){
     })
 }
 function countVote(){
-    return prisma.VoteDate.groupBy({
-        by:['listeId'],
-        _count:{
-            _all:true
-        },
+    return prisma.liste.findMany({
+        select:{
+            id:true,
+            title:true,
+            image:true,
+            _count:{
+                select:{
+                    vote:true
+                }
+            }
+
+        }
+
     })
 }
 module.exports ={vote,countVote}
