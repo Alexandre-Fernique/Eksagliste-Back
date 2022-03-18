@@ -11,7 +11,7 @@ router.post('/create', function(req, res) {
     if(Test.text(req.body.text)){
         Auth.decode(req).then((decoded)=>{
             Post.create(decoded.id,req.body.text).then(()=>{
-                res.sendStatus(200)
+                res.status(200).send()
             }).catch((e)=>{
                 console.log(e)
                 res.sendStatus(401)
