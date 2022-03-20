@@ -8,7 +8,7 @@ const Auth = require(path.join(__dirname, '../bin/auth'))
 router.post('/vote', function(req, res) {
     Auth.decode(req).then((decoded)=>{
         Liste.vote(decoded.id,req.body.liste).then(()=>{
-            res.sendStatus(200)
+            res.status(200).send()
         }).catch((e)=>{
             console.log(e)
             res.sendStatus(401)
@@ -27,6 +27,22 @@ router.get('/count', function(req, res,) {
     })
 
 });
+router.get('/voteUser', function(req, res,) {
+    Auth.decode(req).then((decoded)=>{
+        Liste.voteUser(decoded.id).then((query)=>{
+            console.log(query)
+            res.status(200).json(query)
+        }).catch((e)=>{
+            console.log(e)
+            res.sendStatus(401)
+        })
+    }).catch((e)=>{
+        console.log(e)
+        res.sendStatus(401)
+    })
+
+});
+
 
 
 

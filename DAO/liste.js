@@ -38,4 +38,21 @@ function countVote(){
 
     })
 }
-module.exports ={vote,countVote}
+function voteUser(id){
+    const date = new Date()
+    return prisma.VoteDate.findUnique({
+        where:{
+            userId_date:{
+                userId: id,
+                date: date.toISOString()
+            }
+        },
+        select:{
+            listeId:true,
+
+
+        }
+
+    })
+}
+module.exports ={vote,countVote,voteUser}
