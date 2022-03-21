@@ -30,14 +30,16 @@ router.post('/login', function(req, res) {
 });
 
 router.post('/create', function(req, res) {
-  console.log(req.body)
-  User.create(req.body.email,req.body.formation, req.body.annee).then((res)=>{
-    console.log(res)
-  }).catch((e)=>{
-    console.log(e)
-  })
 
-  res.send('respond with a resource');
+  if(process.env.AUTHADMINKEY == req.headers.authorization){
+    User.create(req.body.email,req.body.formation, req.body.annee).then(()=>{
+      res.status(200).send("OK")
+    }).catch((e)=>{
+      console.log(e)
+      res.sendStatus(401)
+    })
+
+  }
 });
 
 router.put('/updatePassword/:uuid', function(req, res) {
