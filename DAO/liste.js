@@ -28,13 +28,34 @@ function countVote(){
             id:true,
             title:true,
             image:true,
-            _count:{
-                select:{
-                    vote:true
+            _count: {
+                select: {
+                    vote: true
                 }
             }
-
         }
+    })
+}
+function countJoursVote(){
+    return prisma.VoteDate.groupBy({
+        by:["date","listeId"],
+        orderBy: {
+            date: 'desc',
+        },
+        select:{
+            date:true,
+
+            listeId:true,
+
+
+        },
+        _count: {
+            userId: true,
+        },
+
+
+
+
 
     })
 }
@@ -55,4 +76,4 @@ function voteUser(id){
 
     })
 }
-module.exports ={vote,countVote,voteUser}
+module.exports ={vote,countVote,voteUser,countJoursVote}

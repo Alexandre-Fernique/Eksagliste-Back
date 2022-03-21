@@ -42,7 +42,14 @@ router.get('/voteUser', function(req, res,) {
     })
 
 });
-
+router.get('/countJour', function(req, res,) {
+    Liste.countJoursVote().then((query)=>{
+        res.status(200).json(query)
+    }).catch((e)=>{
+        console.log(e)
+        res.sendStatus(401)
+    })
+});
 
 
 
