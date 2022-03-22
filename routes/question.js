@@ -12,7 +12,7 @@ const passwordHash = require('password-hash');
 router.post('/add', function (req, res) {
     console.log(req.body)
     Question.create(req.body.question).then((res) => {
-        res.status(200).send()
+        res.status(200).json(res)
     }).catch((e) => {
         console.log(e)
         res.sendStatus(400)
