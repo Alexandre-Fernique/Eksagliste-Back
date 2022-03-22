@@ -25,24 +25,24 @@ function vote(uuid, question, liste){
 }
 
 async function getVoteQuestion(){
-    var result = {
-        vote: []
-    }
+    var result = []
     const questions = await Question.getAll()
     const listes = await Liste.getAll()
     for(var i = 0; i<questions.length; i++){
         var voteQ = {
             question: questions[i].question,
+            questionId: questions[i].id,
             listes: []
         }
         for(var j = 0; j < listes.length; j++){
             const nbVote = await countVote(questions[i].id, listes[j].id)
             voteQ.listes.push({
                 liste: listes[j].title,
+                id: listes[j].id,
                 vote: nbVote
             })
         }
-        result.vote.push(voteQ)
+        result.push(voteQ)
     }
     return result
 }
