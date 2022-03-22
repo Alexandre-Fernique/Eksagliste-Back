@@ -29,8 +29,13 @@ router.post('/login', function(req, res) {
 router.post('/signin', function(req, res) {
   if(Test.email(req.body.email) && Test.password(req.body.password) && Test.formation(req.body.formation,req.body.annee)){
     const hashedPassword = passwordHash.generate(req.body.password);
-    User.signin(req.body.email,hashedPassword,req.body.formation, req.body.annee).then(()=>{
+    User.signin(req.body.email,hashedPassword,req.body.formation, req.body.annee).then((query)=>{
+      if (query.count == 1) {
         res.status(201).send()
+      } else {
+        res.sendStatus(401)
+      }
+
     }).catch((e)=>{
       console.log(e)
       res.sendStatus(401)
