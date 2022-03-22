@@ -4,19 +4,19 @@ const path = require('path');
 const Question = require(path.join(__dirname, '../DAO/question'))
 const VoteQuestion = require(path.join(__dirname, '../DAO/voteQuestion'))
 const Auth = require(path.join(__dirname, '../bin/auth'))
-const Test = require(path.join(__dirname, '../bin/Test'))
 const Jwt = require('jsonwebtoken');
-const passwordHash = require('password-hash');
 
 
 router.post('/add', function (req, res) {
     console.log(req.body)
-    Question.create(req.body.question).then((res) => {
-        res.status(200).json(res)
-    }).catch((e) => {
-        console.log(e)
-        res.sendStatus(400)
-    })
+    //if(process.env.AUTHADMINKEY == req.headers.authorization) {
+        Question.create(req.body.question).then(() => {
+            res.status(200).json("OK")
+        }).catch((e) => {
+            console.log(e)
+            res.sendStatus(400)
+        })
+    //}
 });
 
 router.get('/vote', function(req, res,) {
