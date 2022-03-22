@@ -42,47 +42,29 @@ async function getVoteQuestion(){
                 vote: nbVote
             })
         }
-        console.log(voteQ)
         result.vote.push(voteQ)
     }
-    console.log(result)
     return result
 }
 
 
 async function countVote(question, liste){
-    console.log(question, liste)
     const result = await prisma.voteQuestion.findMany({
         where: {
             questionId: question,
             listeId: liste
         }
     })
-    console.log(result.length)
     return result.length
 }
-function countJoursVote(){
-    return prisma.VoteDate.groupBy({
-        by:["date","listeId"],
-        orderBy: {
-            question: 'asc',
-        },
-        select:{
-            date:true,
-            listeId:true,
-        },
-        _count: {
-            userId: true,
-        },
-    })
-}
-function voteUser(id){
-    const date = new Date()
-    return prisma.VoteDate.findUnique({
+
+//question = question id
+function voteUser(id, question){
+    return prisma.voteQuestion.findUnique({
         where:{
-            userId_date:{
+            userId_questionId:{
                 userId: id,
-                date: date.toISOString()
+                questionId: question
             }
         },
         select:{
@@ -90,4 +72,4 @@ function voteUser(id){
         }
     })
 }
-module.exports ={vote, getVoteQuestion, countVote,voteUser,countJoursVote}
+module.exports ={vote, getVoteQuestion, voteUser}

@@ -43,4 +43,18 @@ router.post('/vote', function(req, res) {
     })
 });
 
+router.get('/voteUser', function(req, res,) {
+    Auth.decode(req).then((decoded)=>{
+        VoteQuestion.voteUser(decoded.id, req.body.question).then((query)=>{
+            res.status(200).json(query)
+        }).catch((e)=>{
+            console.log(e)
+            res.sendStatus(401)
+        })
+    }).catch((e)=>{
+        console.log(e)
+        res.sendStatus(401)
+    })
+
+});
 module.exports = router;
