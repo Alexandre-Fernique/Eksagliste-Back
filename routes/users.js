@@ -15,7 +15,7 @@ router.post('/login', function(req, res) {
       console.log(query)
       if (query != null && passwordHash.verify(req.body.password, query.password)) {
         let token = Jwt.sign({id: query.id}, process.env.SECRETKEY || "test")
-        res.json({'acess_token':token})
+        res.status(200).json({'acess_token':token})
       } else {
         res.sendStatus(400)
       }
@@ -29,16 +29,25 @@ router.post('/login', function(req, res) {
   }
 });
 
+router.post('/signin', function(req, res) {
+  if(Test.email(req.body.email) && Test.password(req.body.password) && Test.formation(req.body.formation,req.body.annee)){
+    const hashedPassword = passwordHash.generate(req.body.password);
+    User.signin(req.body.email,hashedPassword,req.body.formation, req.body.annee).then(()=>{
+        res.status(201).send()
+    }).catch((e)=>{
+      console.log(e)
+      res.sendStatus(401)
+    })
+  }
+});
 router.post('/create', function(req, res) {
-
-  if(process.env.AUTHADMINKEY == req.headers.authorization){
-    User.create(req.body.email,req.body.formation, req.body.annee).then(()=>{
+  if(req.headers.authorization == process.env.AUTHKEY){
+    User.create(req.body.email).then(()=>{
       res.status(200).send("OK")
     }).catch((e)=>{
       console.log(e)
       res.sendStatus(401)
     })
-
   }
 });
 
