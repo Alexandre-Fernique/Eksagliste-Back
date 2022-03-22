@@ -22,7 +22,7 @@ model Liste {
 model User {
   id String      @id @default(uuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   email String   @db.VarChar(255) @unique
   password String?
   formation Promo?
