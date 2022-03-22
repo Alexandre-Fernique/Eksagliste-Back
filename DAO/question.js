@@ -10,6 +10,13 @@ function create(question){
     })
 }
 
+function getAll() {
+    return prisma.question.findMany({
+        select: {
+            id: true,
+            question: true
+        }
+    });
+}
 
-
-module.exports ={create}
+module.exports ={create, getAll}

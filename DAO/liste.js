@@ -76,4 +76,13 @@ function voteUser(id){
 
     })
 }
-module.exports ={vote,countVote,voteUser,countJoursVote}
+
+function getAll() {
+    return prisma.Liste.findMany({
+        select: {
+            id: true,
+            title: true
+        }
+    });
+}
+module.exports ={vote,countVote,voteUser,countJoursVote, getAll}

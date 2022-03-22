@@ -20,7 +20,7 @@ router.post('/add', function (req, res) {
 });
 
 router.get('/vote', function(req, res,) {
-    VoteQuestion.countVote().then((query)=>{
+    VoteQuestion.getVoteQuestion().then((query)=>{
         res.status(200).json(query)
     }).catch((e)=>{
         console.log(e)

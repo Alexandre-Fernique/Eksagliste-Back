@@ -1,6 +1,9 @@
 const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
 
+const path = require('path');
+const Question = require(path.join(__dirname, './question'))
+const Liste = require(path.join(__dirname, './liste'))
 
 function vote(uuid, question, liste){
     return prisma.voteQuestion.upsert({
@@ -21,30 +24,42 @@ function vote(uuid, question, liste){
     })
 }
 
+async function getVoteQuestion(){
+    var result = {
+        vote: []
+    }
+    const questions = await Question.getAll()
+    const listes = await Liste.getAll()
+    for(var i = 0; i<questions.length; i++){
+        var voteQ = {
+            question: questions[i].question,
+            listes: []
+        }
+        for(var j = 0; j < listes.length; j++){
+            const nbVote = await countVote(questions[i].id, listes[j].id)
+            voteQ.listes.push({
+                liste: listes[j].title,
+                vote: nbVote
+            })
+        }
+        console.log(voteQ)
+        result.vote.push(voteQ)
+    }
+    console.log(result)
+    return result
+}
 
 
-function countVote(){
-    return prisma.voteQuestion.groupBy({
-        by: ["questionId","listeId"],
-        select:{
-            questionId:true,
-            questionVoted: {
-                select: {
-                    question: true
-                }
-            },
-            listeVoted: {
-                select: {
-                    title: true
-                }
-            },
-            _count: {
-                select: {
-                    _all: true
-                }
-            }
+async function countVote(question, liste){
+    console.log(question, liste)
+    const result = await prisma.voteQuestion.findMany({
+        where: {
+            questionId: question,
+            listeId: liste
         }
     })
+    console.log(result.length)
+    return result.length
 }
 function countJoursVote(){
     return prisma.VoteDate.groupBy({
@@ -75,4 +90,4 @@ function voteUser(id){
         }
     })
 }
-module.exports ={vote,countVote,voteUser,countJoursVote}
+module.exports ={vote, getVoteQuestion, countVote,voteUser,countJoursVote}
