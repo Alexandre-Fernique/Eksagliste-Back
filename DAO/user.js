@@ -6,13 +6,24 @@ function login(email){
         where: {email: email},
     })
 }
-function create(email,formation,annee){
+function signin(email,password,formation,annee){
+    return prisma.user.updateMany({
+        where:{
+            email,
+            password: null
+        },
+        data: {
+            password,
+            formation,
+            annee
+        }
+    })
+}
+function create(email){
     return prisma.user.create({
-            data: {
-                email,
-                formation,
-                annee
-            }
+        data: {
+            email
+        }
     })
 }
 function update(uuid,password){
@@ -26,4 +37,4 @@ function update(uuid,password){
         }
     })
 }
-module.exports ={login,create,update}
+module.exports ={login,signin,create,update}
