@@ -10,7 +10,7 @@ const Jwt = require('jsonwebtoken');
 router.post('/add', function (req, res) {
     console.log(req.body)
     console.log(req.headers.authorization)
-    if(process.env.AUTHADMINKEY == req.headers.authorization) {
+    if(process.env.AUTHKEY == req.headers.authorization) {
         Question.create(req.body.question).then(() => {
             res.status(200).json("OK")
         }).catch((e) => {
