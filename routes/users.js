@@ -10,9 +10,7 @@ const passwordHash = require('password-hash');
 
 router.post('/login', function(req, res) {
   if(Test.email(req.body.email)) {
-  console.log(req.body)
-    User.login(req.body.email).then((query) => {
-      console.log(query)
+    User.login(req.body.email).then((query)=>{
       if (query != null && passwordHash.verify(req.body.password, query.password)) {
         let token = Jwt.sign({id: query.id}, process.env.SECRETKEY || "test")
         res.json({'acess_token':token})
@@ -32,12 +30,13 @@ router.post('/login', function(req, res) {
 router.post('/create', function(req, res) {
   console.log(req.body)
   User.create(req.body.email,req.body.formation, req.body.annee).then((res)=>{
-    console.log(res)
+    res.status(200).send()
   }).catch((e)=>{
     console.log(e)
+    res.sendStatus(401)
   })
 
-  res.send('respond with a resource');
+  
 });
 
 router.put('/updatePassword/:uuid', function(req, res) {
