@@ -10,7 +10,8 @@ const passwordHash = require('password-hash');
 
 router.post('/login', function(req, res) {
   if(Test.email(req.body.email)) {
-    User.login(req.body.email).then((query)=>{
+
+    User.login(req.body.email).then((query) => {
       if (query != null && passwordHash.verify(req.body.password, query.password)) {
         let token = Jwt.sign({id: query.id}, process.env.SECRETKEY || "test")
         res.status(200).json({'acess_token':token})
@@ -19,8 +20,7 @@ router.post('/login', function(req, res) {
       }
     }).catch((e) => {
       console.log(e)
-      res.send(
-          'err');
+      res.sendStatus(503)
     })
   }else {
     res.sendStatus(401)
@@ -30,8 +30,13 @@ router.post('/login', function(req, res) {
 router.post('/signin', function(req, res) {
   if(Test.email(req.body.email) && Test.password(req.body.password) && Test.formation(req.body.formation,req.body.annee)){
     const hashedPassword = passwordHash.generate(req.body.password);
-    User.signin(req.body.email,hashedPassword,req.body.formation, req.body.annee).then(()=>{
+    User.signin(req.body.email,hashedPassword,req.body.formation, req.body.annee).then((query)=>{
+      if (query.count == 1) {
         res.status(201).send()
+      } else {
+        res.sendStatus(401)
+      }
+
     }).catch((e)=>{
       console.log(e)
       res.sendStatus(401)
