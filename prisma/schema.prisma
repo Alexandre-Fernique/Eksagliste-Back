@@ -16,6 +16,7 @@ model Liste {
   title     String   @db.VarChar(255)
   image     String?
   vote VoteDate[]
+  voteQuestion VoteQuestion[]
 
 }
 
@@ -29,6 +30,7 @@ model User {
   annee Int?
   post Post[]
   vote VoteDate[]
+  voteQuestion VoteQuestion[]
 
 }
 model Post {
@@ -46,6 +48,22 @@ model VoteDate{
     listeVoted    Liste   @relation(fields: [listeId], references: [id])
     userVoted User @relation(fields:[userId],references:[id])
     @@id([userId,date])
+
+}
+model Question {
+  id String      @id @default(uuid())
+  question String
+  vote VoteQuestion[]
+
+}
+model VoteQuestion {
+    userId String
+    questionId String
+    listeId Int
+    listeVoted    Liste   @relation(fields: [listeId], references: [id])
+    questionVoted    Question   @relation(fields: [questionId], references: [id])
+    userVoted User @relation(fields:[userId],references:[id])
+    @@id([userId,questionId])
 
 }
 enum Promo{

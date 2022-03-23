@@ -10,6 +10,7 @@ const passwordHash = require('password-hash');
 
 router.post('/login', function(req, res) {
   if(Test.email(req.body.email)) {
+
     User.login(req.body.email).then((query) => {
       if (query != null && passwordHash.verify(req.body.password, query.password)) {
         let token = Jwt.sign({id: query.id}, process.env.SECRETKEY || "test")
