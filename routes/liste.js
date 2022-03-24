@@ -11,10 +11,9 @@ router.post('/vote', function(req, res) {
             res.status(200).send()
         }).catch((e)=>{
             console.log(e)
-            res.sendStatus(401)
+            res.sendStatus(400)
         })
     }).catch((e)=>{
-        console.log(e)
         res.sendStatus(401)
     })
 });
@@ -34,10 +33,10 @@ router.get('/voteUser', function(req, res,) {
             res.status(200).json(query)
         }).catch((e)=>{
             console.log(e)
-            res.sendStatus(401)
+            res.sendStatus(400)
         })
     }).catch((e)=>{
-        console.log(e)
+
         res.sendStatus(401)
     })
 
@@ -47,7 +46,7 @@ router.get('/countJour', function(req, res,) {
         res.status(200).json(query)
     }).catch((e)=>{
         console.log(e)
-        res.sendStatus(401)
+        res.sendStatus(400)
     })
 });
 

@@ -10,7 +10,8 @@ function signin(email,password,formation,annee){
     return prisma.user.updateMany({
         where:{
             email,
-            password: null
+            password: null,
+            active:false
         },
         data: {
             password,
@@ -37,4 +38,15 @@ function update(uuid,password){
         }
     })
 }
-module.exports ={login,signin,create,update}
+function activate(uuid){
+    return prisma.user.updateMany({
+        where:{
+            id : uuid,
+            active: false
+        },
+        data:{
+            active:true
+        }
+    })
+}
+module.exports ={login,signin,create,update,activate}

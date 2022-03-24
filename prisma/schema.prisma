@@ -28,6 +28,7 @@ model User {
   password String?
   formation Promo?
   annee Int?
+  active Boolean @default(false)
   post Post[]
   vote VoteDate[]
   voteQuestion VoteQuestion[]
