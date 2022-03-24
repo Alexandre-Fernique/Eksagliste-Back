@@ -13,7 +13,7 @@ router.post('/login', function(req, res) {
   if(Test.email(req.body.email)) {
 
     User.login(req.body.email.toLowerCase()).then((query) => {
-      if (query != null && passwordHash.verify(req.body.password, query.password) && query.activate == true) {
+      if (query != null && passwordHash.verify(req.body.password, query.password) && query.active == true) {
         let token = Jwt.sign({id: query.id}, process.env.SECRETKEY || "test")
         res.status(200).json({'acess_token':token})
       } else {
